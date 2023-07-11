@@ -646,9 +646,6 @@ public class LiveShareActivity extends SolutionBaseActivity {
         if (isFirstPlay) {
             TargetScene scene = new TargetScene(Room.SCENE_CHAT);
             updateRoomSceneAndUi(scene, false);
-        } else {
-            // It is not the first time that the parsing fails. You need to stop and look at the page.
-            SolutionToast.show(getString(R.string.failed_parse_url));
         }
     };
 

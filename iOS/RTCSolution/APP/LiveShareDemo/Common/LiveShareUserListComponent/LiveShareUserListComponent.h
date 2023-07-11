@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateLocalUserVolume:(NSInteger)volume;
 
 - (void)updateRemoteUserVolume:(NSDictionary *)volumeDict;
+- (void)layoutScrollDirectionHorizontal;
 
 @end
 

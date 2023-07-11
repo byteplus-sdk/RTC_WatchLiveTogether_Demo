@@ -1,8 +1,7 @@
-//
+// 
 // Copyright (c) 2023 BytePlus Pte. Ltd.
 // SPDX-License-Identifier: MIT
-//
-
+// 
 
 #import "LiveShareVideoComponent.h"
 #import <TTSDK/TTVideoLive.h>
@@ -170,10 +169,10 @@ static void audio_release(void *context) {
 }
 
 #pragma mark - Publish Action
-
 - (void)playWihtURLString:(NSString *)urlString {
 
     [self.tvlManager stop];
+    // 设置播放器Item
     TVLPlayerItem *item = [TVLPlayerItem playerItemWithURL:[NSURL URLWithString:urlString]];
     
     if (!item) {
@@ -185,14 +184,12 @@ static void audio_release(void *context) {
     }
     
     [self.tvlManager replaceCurrentItemWithPlayerItem:item];
-    
+    // 播放
     [self.tvlManager play];
 }
-
 - (void)stop {
     [self.tvlManager stop];
 }
-
 - (void)close {
     if (_tvlManager) {
         [_tvlManager stop];
@@ -211,5 +208,6 @@ static void audio_release(void *context) {
         _audioWrapper = nil;
     }
 }
+#pragma mark - Getter
 
 @end
