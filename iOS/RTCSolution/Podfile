@@ -1,9 +1,7 @@
-source 'https://github.com/CocoaPods/Specs.git'
-source 'https://github.com/byteplus-sdk/byteplus-specs.git'
-source 'https://github.com/volcengine/volcengine-specs.git'
+
 
 # RTC SDK
-pod 'BytePlusRTC', '3.52.117'
+pod 'BytePlusRTC', '3.52.117', :source => 'https://github.com/byteplus-sdk/byteplus-specs.git'
 
 target 'RTCSolution' do
   platform :ios, '12.0'
@@ -25,7 +23,7 @@ target 'RTCSolution' do
 
   # Live Share Demo
   pod 'LiveShareDemo', :path => '../RTCSolution/APP/LiveShareDemo'
-  pod 'TTSDK/LivePull', '1.36.200.1-premium'
+  pod 'TTSDK/LivePull', '1.36.200.1-premium', :source => 'https://github.com/volcengine/volcengine-specs.git'
 end
 
 post_install do |installer|
