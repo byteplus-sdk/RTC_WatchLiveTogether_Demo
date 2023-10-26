@@ -4,10 +4,14 @@
 package com.volcengine.vertcdemo.liveshare.feature.player;
 
 import com.ss.bytertc.engine.RTCVideo;
-import com.ss.bytertc.engine.audio.IAudioMixingManager;
+import com.ss.bytertc.engine.audio.IMediaPlayer;
 import com.ss.bytertc.engine.data.AudioChannel;
 import com.ss.bytertc.engine.data.AudioMixingType;
 import com.ss.bytertc.engine.data.AudioSampleRate;
+import com.ss.bytertc.engine.data.MediaPlayerConfig;
+import com.ss.bytertc.engine.data.MediaPlayerCustomSource;
+import com.ss.bytertc.engine.data.MediaPlayerCustomSourceMode;
+import com.ss.bytertc.engine.data.MediaPlayerCustomSourceStreamType;
 import com.ss.bytertc.engine.utils.AudioFrame;
 
 import java.nio.ByteBuffer;
@@ -19,7 +23,7 @@ public class VodAudioProcessor {
     private int mChannelCount;
     private int mSampleRate;
     private final RTCVideo mEngine;
-    private final IAudioMixingManager mixAudioManager;
+    private final IMediaPlayer mixAudioManager;
     private ByteBuffer mRTCBuffer;
 
     private int mMixId = DEFAULT_MIX_ID;
@@ -30,8 +34,20 @@ public class VodAudioProcessor {
 
     public VodAudioProcessor(RTCVideo engine) {
         mEngine = engine;
-        mixAudioManager = mEngine.getAudioMixingManager();
-        mixAudioManager.enableAudioMixingFrame(mMixId, AudioMixingType.AUDIO_MIXING_TYPE_PLAYOUT);
+        mixAudioManager = mEngine.getMediaPlayer(0);
+
+        MediaPlayerCustomSource source = new MediaPlayerCustomSource();
+        source.provider = null;
+        source.mode = MediaPlayerCustomSourceMode.PUSH;
+        source.type = MediaPlayerCustomSourceStreamType.RAW;
+
+        MediaPlayerConfig config = new MediaPlayerConfig(AudioMixingType.AUDIO_MIXING_TYPE_PLAYOUT, 0);
+        config.startPos = 0;
+        config.syncProgressToRecordFrame = false;
+        config.autoPlay = true;
+
+        mixAudioManager.openWithCustomSource(source, config);
+        mixAudioManager.setVolume(mixAudioGain, AudioMixingType.AUDIO_MIXING_TYPE_PLAYOUT);
     }
 
     public void audioOpen(int sampleRate, int channelCount) {
@@ -70,8 +86,8 @@ public class VodAudioProcessor {
         AudioSampleRate sampleRate = getAudioSampleRate(mSampleRate);
         AudioFrame frame = new AudioFrame(mRTCBuffer.array(), samples, sampleRate, channel);
         if (mixAudioManager != null) {
-            mixAudioManager.setAudioMixingVolume(mMixId, mixAudioGain, AudioMixingType.AUDIO_MIXING_TYPE_PLAYOUT);
-            mixAudioManager.pushAudioMixingFrame(mMixId, frame);
+            mixAudioManager.setVolume(mixAudioGain, AudioMixingType.AUDIO_MIXING_TYPE_PLAYOUT);
+            mixAudioManager.pushExternalAudioFrame(frame);
         }
     }
 

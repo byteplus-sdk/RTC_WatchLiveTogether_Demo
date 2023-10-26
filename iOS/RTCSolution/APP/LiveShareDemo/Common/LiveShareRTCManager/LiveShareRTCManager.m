@@ -42,7 +42,7 @@
     [self.rtcEngineKit setLocalVideoMirrorType:ByteRTCMirrorTypeRenderAndEncoder];
     
     _cameraID = ByteRTCCameraIDFront;
-    _audioMixingID = 3001;
+    _audioMixingID = 0;
     VodAudioProcessorAudioMixingID = _audioMixingID;
 }
 
@@ -138,8 +138,21 @@
     self.videoEncoderConfig.height = [LiveShareVideoConfigModel watchingVideoSize].height;
     [self.rtcEngineKit setMaxVideoEncoderConfig:self.videoEncoderConfig];
     // Turn on the mix
-    ByteRTCAudioMixingManager *manager = [self.rtcEngineKit getAudioMixingManager];
-    [manager enableAudioMixingFrame:_audioMixingID type:ByteRTCAudioMixingTypePlayout];
+    ByteRTCMediaPlayer *mediaPlayer = [self.rtcEngineKit getMediaPlayer:_audioMixingID];
+    ByteRTCMediaPlayerCustomSource *customSource = [[ByteRTCMediaPlayerCustomSource alloc] init];
+    customSource.provider = nil;
+    customSource.mode = ByteRTCMediaPlayerCustomSourceModePush;
+    customSource.type = ByteRTCMediaPlayerCustomSourceStreamTypeRaw;
+    
+    ByteRTCMediaPlayerConfig *playerConfig = [[ByteRTCMediaPlayerConfig alloc] init];
+    playerConfig.type = ByteRTCAudioMixingTypePlayout;
+    playerConfig.playCount = 0;
+    playerConfig.startPos = 0;
+    playerConfig.syncProgressToRecordFrame = NO;
+    playerConfig.autoPlay = YES;
+    
+    [mediaPlayer openWithCustomSource:customSource
+                               config:playerConfig];
 }
 
 - (void)stopAudioMixing {
@@ -148,8 +161,8 @@
     self.videoEncoderConfig.height = [LiveShareVideoConfigModel defaultVideoSize].height;
     [self.rtcEngineKit setMaxVideoEncoderConfig:self.videoEncoderConfig];
     // Turn off the mix
-    ByteRTCAudioMixingManager *manager = [self.rtcEngineKit getAudioMixingManager];
-    [manager disableAudioMixingFrame:_audioMixingID];
+    ByteRTCMediaPlayer *mediaPlayer = [self.rtcEngineKit getMediaPlayer:_audioMixingID];
+    [mediaPlayer stop];
 }
 
 - (void)setRecordingVolume:(CGFloat)recordingVolume {
@@ -161,8 +174,8 @@
 - (void)setAudioMixingVolume:(CGFloat)audioMixingVolume {
     // Adjust the volume of the mix [0, 1.0]
     _audioMixingVolume = audioMixingVolume;
-    ByteRTCAudioMixingManager *audioMixingManager = [self.rtcEngineKit getAudioMixingManager];
-    [audioMixingManager setAudioMixingVolume:_audioMixingID volume:(int)(_audioMixingVolume*100) type:ByteRTCAudioMixingTypePlayout];
+    ByteRTCMediaPlayer *mediaPlayer = [self.rtcEngineKit getMediaPlayer:_audioMixingID];
+    [mediaPlayer setVolume:(int)(_audioMixingVolume*100) type:ByteRTCAudioMixingTypePlayout];
 }
 
 - (void)setEnableAudioDucking:(BOOL)enableAudioDucking {

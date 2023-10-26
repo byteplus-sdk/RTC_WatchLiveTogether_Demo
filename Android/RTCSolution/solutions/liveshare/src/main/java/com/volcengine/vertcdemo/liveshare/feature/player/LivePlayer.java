@@ -56,6 +56,7 @@ public class LivePlayer extends Observable {
         ILiveListener liveListener = new ILiveListener.Stub() {
             @Override
             public void onError(LiveError liveError) {
+                Log.d(TAG, "onError:" + liveError);
                 notifyObservers(new PlayStateError(liveError.toString()));
             }
 

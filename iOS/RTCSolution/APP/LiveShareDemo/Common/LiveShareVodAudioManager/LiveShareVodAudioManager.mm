@@ -6,7 +6,7 @@
 #import "LiveShareVodAudioManager.h"
 #import "ToolKit.h"
 
-int VodAudioProcessorAudioMixingID = 3001;
+int VodAudioProcessorAudioMixingID = 0;
 
 @interface LiveShareVodAudioManager ()
 
@@ -72,8 +72,8 @@ int VodAudioProcessorAudioMixingID = 3001;
     frame.channel = (ByteRTCAudioChannel)channelsCount;
     frame.sampleRate = (ByteRTCAudioSampleRate)samplerate;
     
-    ByteRTCAudioMixingManager *manager = [self.rtcKit getAudioMixingManager];
-    [manager pushAudioMixingFrame:VodAudioProcessorAudioMixingID audioFrame:frame];
+    ByteRTCMediaPlayer *manager = [self.rtcKit getMediaPlayer:VodAudioProcessorAudioMixingID];
+    [manager pushExternalAudioFrame:frame];
 }
 
 - (void)dealloc {

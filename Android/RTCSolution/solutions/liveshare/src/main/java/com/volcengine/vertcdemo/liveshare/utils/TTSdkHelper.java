@@ -17,7 +17,7 @@ import com.volcengine.vertcdemo.utils.AppUtil;
 
 public class TTSdkHelper {
 
-    private static final String TT_VIDEO_PLAYER_APP_ID = "435022";
+    private static final String TT_VIDEO_PLAYER_APP_ID = "";
     private static final String TT_VIDEO_PLAYER_APP_NAME = "byteplus_demo";
 
     public static void initTTVodSdk() {

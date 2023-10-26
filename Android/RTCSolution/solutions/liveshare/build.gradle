@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion project.compileSdkVersion
+    compileSdk project.compileSdkVersion
 
     defaultConfig {
         minSdkVersion project.minSdkVersion
@@ -51,7 +51,6 @@ dependencies {
     implementation project(':component:ToolKit')
 
     implementation project(":component:$JOIN_RTS_MODULE")
-    implementation 'commons-net:commons-net:3.6'
 
     implementation "org.greenrobot:eventbus:$EventBusVersion"
     implementation "com.google.code.gson:gson:$GsonVersion"

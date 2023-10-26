@@ -6,7 +6,6 @@ package com.volcengine.vertcdemo.liveshare.core;
 import androidx.annotation.NonNull;
 
 import com.google.gson.JsonObject;
-import com.ss.bytertc.base.utils.NetworkUtils;
 import com.ss.bytertc.engine.RTCVideo;
 import com.volcengine.vertcdemo.common.AbsBroadcast;
 import com.volcengine.vertcdemo.common.AppExecutors;
@@ -31,6 +30,7 @@ import com.volcengine.vertcdemo.liveshare.bean.response.JoinShareResponse;
 import com.volcengine.vertcdemo.liveshare.bean.response.LeaveShareResponse;
 import com.volcengine.vertcdemo.liveshare.bean.response.UpdateUrlResponse;
 import com.volcengine.vertcdemo.utils.AppUtil;
+import com.volcengine.vertcdemo.utils.NetworkUtils;
 
 import java.util.UUID;
 
@@ -247,10 +247,7 @@ public class LiveShareRTSClient extends RTSBaseClient {
     }
 
     private boolean isNetworkDisabled() {
-        if (!NetworkUtils.isNetworkAvailable(AppUtil.getApplicationContext())) {
-            return true;
-        }
-        return false;
+        return !NetworkUtils.isNetworkAvailable(AppUtil.getApplicationContext());
     }
 
     private static final String INFORM_JOIN_ROOM = "twvOnJoinRoom";
